@@ -348,6 +348,7 @@ std::string subconverter(RESPONSE_CALLBACK_ARGS) {
         argument, "udp"), argGenNodeList = getUrlArg(argument, "list");
     tribool argSort = getUrlArg(argument, "sort"), argUseSortScript = getUrlArg(argument, "sort_script");
     tribool argGenClashScript = getUrlArg(argument, "script"), argEnableInsert = getUrlArg(argument, "insert");
+    tribool argSupportX25519Mlkem768 = getUrlArg(argument, "support_x25519mlkem768");
     tribool argSkipCertVerify = getUrlArg(argument, "scv"), argFilterDeprecated = getUrlArg(argument,
         "fdn"), argExpandRulesets = getUrlArg(
         argument, "expand"), argAppendUserinfo = getUrlArg(argument, "append_info");
@@ -444,6 +445,7 @@ std::string subconverter(RESPONSE_CALLBACK_ARGS) {
     ext.filter_deprecated = argFilterDeprecated.get(global.filterDeprecated);
     ext.clash_new_field_name = argClashNewField.get(global.clashUseNewField);
     ext.clash_script = argGenClashScript.get();
+    ext.support_x25519mlkem768 = argSupportX25519Mlkem768.get();
     ext.clash_classical_ruleset = argGenClassicalRuleProvider.get();
     if (!argExpandRulesets)
         ext.clash_new_field_name = true;
