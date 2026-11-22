@@ -135,6 +135,7 @@ struct Proxy {
     String ShortId;
     String Flow;
     String Encryption;
+    tribool SupportX25519MLKEM768;
     bool FlowShow = false;
     tribool DisableSni;
     uint32_t UpSpeed;

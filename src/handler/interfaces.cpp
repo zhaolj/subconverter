@@ -445,7 +445,7 @@ std::string subconverter(RESPONSE_CALLBACK_ARGS) {
     ext.filter_deprecated = argFilterDeprecated.get(global.filterDeprecated);
     ext.clash_new_field_name = argClashNewField.get(global.clashUseNewField);
     ext.clash_script = argGenClashScript.get();
-    ext.support_x25519mlkem768 = argSupportX25519Mlkem768.get();
+    ext.support_x25519mlkem768 = argSupportX25519Mlkem768;
     ext.clash_classical_ruleset = argGenClassicalRuleProvider.get();
     if (!argExpandRulesets)
         ext.clash_new_field_name = true;

@@ -1300,6 +1300,7 @@ void explodeClash(Node yamlnode, std::vector<Proxy> &nodes) {
         std::string proxytype, ps, server, port, cipher, group, password = "", ports, tempPassword; //common
         std::string type = "none", id, aid = "0", net = "tcp", path, host, edge, tls, sni; //vmess
         std::string fp = "chrome", pbk, sid, packet_encoding, encryption; //vless
+        tribool vless_mlkem768; //vless reality post-quantum flag
         std::string plugin, pluginopts, pluginopts_mode, pluginopts_host, pluginopts_mux; //ss
         std::string protocol, protoparam, obfs, obfsparam; //ssr
         std::string flow, mode; //trojan
@@ -1608,6 +1609,12 @@ void explodeClash(Node yamlnode, std::vector<Proxy> &nodes) {
                     printf("host:%s", host.c_str());
                     singleproxy["reality-opts"]["public-key"] >>= pbk;
                     singleproxy["reality-opts"]["short-id"] >>= sid;
+                    if (singleproxy["reality-opts"]["support-x25519mlkem768"].IsDefined())
+                    {
+                        bool mlkem_val = false;
+                        singleproxy["reality-opts"]["support-x25519mlkem768"] >> mlkem_val;
+                        vless_mlkem768 = mlkem_val;
+                    }
                 }
                 singleproxy["flow"] >>= flow;
                 singleproxy["client-fingerprint"] >>= fp;
@@ -1619,6 +1626,7 @@ void explodeClash(Node yamlnode, std::vector<Proxy> &nodes) {
                 vlessConstruct(node, XRAY_DEFAULT_GROUP, ps, server, port, type, id, aid, net, "auto", flow, mode,
                                path, host, "", tls, pbk, sid, fp, sni, alpnList, packet_encoding, encryption, udp,
                                tribool(), tribool(), tribool(), underlying_proxy, v2ray_http_upgrade);
+                node.SupportX25519MLKEM768 = vless_mlkem768;
                 break;
             case "hysteria"_hash:
                 group = HYSTERIA_DEFAULT_GROUP;
@@ -1963,8 +1971,13 @@ void explodeStdVless(std::string vless, Proxy &node) {
     if (remarks.empty())
         remarks = add + ":" + port;
     sni = getUrlArg(addition, "sni");
+    std::string mlkem = getUrlArg(addition, "support-x25519mlkem768");
+    if (mlkem.empty())
+        mlkem = getUrlArg(addition, "support_x25519mlkem768");
     vlessConstruct(node, XRAY_DEFAULT_GROUP, remarks, add, port, type, id, aid, net, "auto", flow, mode, path, host, "",
                    tls, pbk, sid, fp, sni, alpnList, packet_encoding, encryption);
+    if (!mlkem.empty())
+        node.SupportX25519MLKEM768.set(mlkem);
     return;
 }
 
