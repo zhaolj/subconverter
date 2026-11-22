@@ -1625,7 +1625,7 @@ void explodeClash(Node yamlnode, std::vector<Proxy> &nodes) {
                 singleproxy["udp"] >> vless_udp;
                 vlessConstruct(node, XRAY_DEFAULT_GROUP, ps, server, port, type, id, aid, net, "auto", flow, mode,
                                path, host, "", tls, pbk, sid, fp, sni, alpnList, packet_encoding, encryption, udp,
-                               tribool(), tribool(), tribool(), underlying_proxy, v2ray_http_upgrade);
+                               tribool(), scv, tribool(), underlying_proxy, v2ray_http_upgrade);
                 node.SupportX25519MLKEM768 = vless_mlkem768;
                 break;
             case "hysteria"_hash:
