@@ -1911,6 +1911,7 @@ void explodeStdHysteria2(std::string hysteria2, Proxy &node) {
 
 void explodeStdVless(std::string vless, Proxy &node) {
     std::string add, port, type, id, aid, net, flow, pbk, sid, fp, mode, path, host, tls, remarks, sni, encryption;
+    tribool scv;
     std::string addition;
     vless = vless.substr(8);
     string_size pos;
@@ -1971,11 +1972,12 @@ void explodeStdVless(std::string vless, Proxy &node) {
     if (remarks.empty())
         remarks = add + ":" + port;
     sni = getUrlArg(addition, "sni");
+    scv = getUrlArg(addition, "allowInsecure");
     std::string mlkem = getUrlArg(addition, "support-x25519mlkem768");
     if (mlkem.empty())
         mlkem = getUrlArg(addition, "support_x25519mlkem768");
     vlessConstruct(node, XRAY_DEFAULT_GROUP, remarks, add, port, type, id, aid, net, "auto", flow, mode, path, host, "",
-                   tls, pbk, sid, fp, sni, alpnList, packet_encoding, encryption);
+                   tls, pbk, sid, fp, sni, alpnList, packet_encoding, encryption, tribool(), tribool(), scv);
     if (!mlkem.empty())
         node.SupportX25519MLKEM768.set(mlkem);
     return;
@@ -3223,7 +3225,7 @@ void explodeSingbox(rapidjson::Value &outbounds, std::vector<Proxy> &nodes) {
 
                         vlessConstruct(node, group, ps, server, port, type, id, aid, net, "auto", flow, mode, path,
                                        host, "", tls, pbk, sid, fp, sni, alpnList, packet_encoding, encryption,
-                                       udp, tribool(), tribool(), tribool(), underlying_proxy);
+                                       udp, tribool(), scv, tribool(), underlying_proxy);
                         break;
                     case "http"_hash:
                         password = GetMember(singboxNode, "password");
